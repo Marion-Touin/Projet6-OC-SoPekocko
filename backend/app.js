@@ -2,6 +2,10 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
+const Sauce = require('./models/Sauce');
+
+const userRoutes = require('./routes/user');
+
 const app = express();
 
 mongoose.connect('mongodb+srv://xallia:xallia@cluster0.9jms3.mongodb.net/db_piquante?retryWrites=true&w=majority',
@@ -19,5 +23,8 @@ app.use((req, res, next) => {
   });
 
   app.use(bodyParser.json());
+
+
+app.use('/api/auth', userRoutes);
 
 module.exports = app;
