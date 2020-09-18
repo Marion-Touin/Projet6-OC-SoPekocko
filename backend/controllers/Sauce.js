@@ -1,18 +1,16 @@
 const Sauce = require('../models/Sauce');
-const fs = require('fs'); // file system, package qui permet de modifier et/ou supprimer des fichiers
+const fs = require('fs');
 
 exports.createSauce = (req, res, next) => {
     const sauceObject = JSON.parse(req.body.sauce);
     delete sauceObject._id;    
-    const sauce = new Sauce({ // un nouvel objet sauce est crée avec le model Sauce
+    const sauce = new Sauce({
         ...sauceObject,
-        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,   // l'url de l'image enregistrée dans le dossier images du serveur est aussi stockée dans la bdd      
+        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,   
     });
-    sauce.save() // la sauce est sauvegardée dans la bdd
-    .then( () => res.status(201).json({ message: 'Sauce saved'}))
+    sauce.save()
+    .then( () => res.status(201).json({ message: 'Sauce sauvegardé'}))
     .catch( error => res.status(400).json({ error }))
-    console.log(sauce);
-    
 };
 
 exports.modifySauce = (req, res, next) => {
@@ -27,23 +25,23 @@ exports.modifySauce = (req, res, next) => {
 };
 
 exports.deleteSauce = (req, res, next) => {
-    Sauce.findOne({_id: req.params.id}) // on identifie la sauce
+    Sauce.findOne({_id: req.params.id})
     .then(sauce => {
-    const filename = sauce.imageUrl.split('/images/')[1]; // on récupère l'adresse de l'image
-    fs.unlink(`images/${filename}`, () => { /// on la supprime du serveur
-    Sauce.deleteOne({_id: req.params.id}) // on supprime la sauce de la bdd
+    const filename = sauce.imageUrl.split('/images/')[1];
+    fs.unlink(`images/${filename}`, () => {
+    Sauce.deleteOne({_id: req.params.id})
     .then(()=> res.status(200).json({ message: 'Sauce supprimé'}))
     .catch(error => res.status(400).json({ error}))
     });
 })
 };
 
-exports.getAllSauces = (req, res, next) => { // on récupère toutes les sauces
+exports.getAllSauces = (req, res, next) => {
     Sauce.find()
     .then( sauces => res.status(200).json(sauces))
     .catch( error => res.status(400).json({ error }))
 };
-exports.getOneSauce = (req, res, next) => {  // on récupère une seule sauce
+exports.getOneSauce = (req, res, next) => {
     Sauce.findOne({_id : req.params.id})
     .then( sauce => res.status(200).json(sauce))
     .catch( error => res.status(404).json({ error }))
