@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
-const Sauce = require('./models/Sauce');
+const sauceRoutes = require('./routes/Sauce');
 
 const userRoutes = require('./routes/user');
 
@@ -14,7 +14,6 @@ mongoose.connect('mongodb+srv://xallia:xallia@cluster0.9jms3.mongodb.net/db_piqu
   .then(() => console.log('Connexion à MongoDB réussie !'))
   .catch(() => console.log('Connexion à MongoDB échouée !'));
 
-
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
@@ -22,8 +21,9 @@ app.use((req, res, next) => {
     next();
   });
 
-  app.use(bodyParser.json());
+app.use(bodyParser.json());
 
+app.use('/api/sauces', sauceRoutes);
 
 app.use('/api/auth', userRoutes);
 
