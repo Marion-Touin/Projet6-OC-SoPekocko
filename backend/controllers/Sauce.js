@@ -73,7 +73,7 @@ exports.likeSauce = (req, res, next) => {
     }   
 };
 
-// Récupération de toute les sauces
+// Récupération de toutes les sauces
 exports.getAllSauces = (req, res, next) => {
     Sauce.find()
     .then( sauces => res.status(200).json(sauces))
