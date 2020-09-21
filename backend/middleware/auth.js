@@ -8,13 +8,13 @@ module.exports = (req, res, next) => {
     const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET'); // Décoder le token
     const userId = decodedToken.userId; // Récupération du userID
     if (req.body.userId && req.body.userId !== userId) { // Vérifier si userID correspond au token
-      throw 'Invalid user ID';
+      throw 'l\'utilisateur n\'es pas valable';
     } else {
       next(); 
     }
   } catch {
     res.status(401).json({
-      error: new Error('Invalid request!')
+      error: new Error('La requête n\'est pas valide!')
     });
   }
 };
