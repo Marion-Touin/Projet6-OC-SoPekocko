@@ -1,6 +1,10 @@
+// importer le modèle sauce
 const Sauce = require('../models/Sauce');
+
+//package qui permet de modifier ou supprimer des fichiers
 const fs = require('fs');
 
+// Création de la sauce
 exports.createSauce = (req, res, next) => {
     const sauceObject = JSON.parse(req.body.sauce);
     delete sauceObject._id;    
@@ -13,6 +17,7 @@ exports.createSauce = (req, res, next) => {
     .catch( error => res.status(400).json({ error }))
 };
 
+// Modification de la sauce
 exports.modifySauce = (req, res, next) => {
     const sauceObject = req.file ?
     {
@@ -24,6 +29,7 @@ exports.modifySauce = (req, res, next) => {
     .catch(()=> res.status(400).json({ error}))
 };
 
+// Suppression de la sauce
 exports.deleteSauce = (req, res, next) => {
     Sauce.findOne({_id: req.params.id})
     .then(sauce => {
@@ -36,11 +42,14 @@ exports.deleteSauce = (req, res, next) => {
 })
 };
 
+// Récupération de toute les sauces
 exports.getAllSauces = (req, res, next) => {
     Sauce.find()
     .then( sauces => res.status(200).json(sauces))
     .catch( error => res.status(400).json({ error }))
 };
+
+// Récupération d'une seule sauce
 exports.getOneSauce = (req, res, next) => {
     Sauce.findOne({_id : req.params.id})
     .then( sauce => res.status(200).json(sauce))

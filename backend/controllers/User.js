@@ -1,6 +1,10 @@
+// Chiffrer le mot de passe
 const bcrypt = require('bcrypt');
+
+//package token
 const jwt = require('jsonwebtoken');
 
+// Importer l'utilisateur
 const User = require('../models/User');
 
 // Inscription de l'utilisateur
@@ -18,6 +22,7 @@ exports.signup = (req, res, next) => {
       .catch(error => res.status(500).json({ error }));
   };
 
+  // Connexion de l'utilisateur
   exports.login = (req, res, next) => {
     User.findOne({ email: req.body.email })
       .then(user => {
